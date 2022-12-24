@@ -1,8 +1,8 @@
 SNAKE Game
 
-- dinamicamente generar un grid a partir del numero de celdas de ancho. Tendra el mismo alto que ancho.
+- dinamicamente generar un grid a partir del numero de celdas de ancho. Tendra el mismo alto que ancho. ✅
 
-- funcion para generar la posicion aleatoria de la manzana (no puede ser en coordenadas donde este la serpiente)
+- funcion para generar la posicion aleatoria de la manzana 🍎(no puede ser en coordenadas donde este la serpiente)
 
 - definir el movimiento:
     -- onKeyDown => cambiara la direccion del movimiento de la cabeza en funcion de la tecla presionada.
