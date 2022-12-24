@@ -1,0 +1,20 @@
+SNAKE Game
+
+- dinamicamente generar un grid a partir del numero de celdas de ancho. Tendra el mismo alto que ancho.
+
+- funcion para generar la posicion aleatoria de la manzana (no puede ser en coordenadas donde este la serpiente)
+
+- definir el movimiento:
+    -- onKeyDown => cambiara la direccion del movimiento de la cabeza en funcion de la tecla presionada.
+    -- funcion para que por cada "x" milisegundos la cabeza de la snake cambie posicion por el grid.
+    -- hacer que el cuerpo siga a la cabeza
+
+- funcion que chequee si es gameOver => cuando cuanlquier parte del cuerpo de la snake toque con otra parte.
+
+- funcion que chequee si se come la manzana 
+      => esto aumenta los puntos y 
+      => la velocidad de movimiento
+
+- 2 opciones de juego:
+    -- que al tocar pared sea gameOver
+    -- que aparezca por el otro extremo del grid
