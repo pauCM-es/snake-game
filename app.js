@@ -15,6 +15,8 @@ directions = [
 
 const grid$$ = document.querySelector("#grid")
 
+const randomNumber = (max) => {return Math.floor(Math.random() * max)}
+
 //*DRAW GRID
 const createGridArray = (size) => {
   for (let i = 0; i < size; i++) {
@@ -43,7 +45,13 @@ const drawGrid = (size) => {
   }
 }
 
-
+const randomApple = (maxX, maxY) => {
+  const positionY = randomNumber(maxY) 
+  const positionX = randomNumber(maxX) 
+  console.log(positionX )
+  console.log(positionY )
+  grid[positionY][positionX] = "A"
+}
 
 
 
@@ -51,3 +59,4 @@ const drawGrid = (size) => {
 
 createGridArray(sizeGrid)
 drawGrid(sizeGrid)
+randomApple(sizeGrid, sizeGrid)
