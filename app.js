@@ -5,6 +5,7 @@ let currentDirection = ["x" , "y"]
 let speed = 500
 let snake = []
 let head = snake[0]
+let appleXY = []
 
 directions = [
   {move: "up", x: 0, y: -1},
@@ -60,7 +61,14 @@ const randomApple = (maxX, maxY) => {
   console.log(positionX )
   console.log(positionY )
   grid[positionY][positionX] = "A"
+
+  //paint apple
+  const apple = gridToElement(positionX, positionY)
+  apple.classList.replace("empty", "apple")
+  apple.textContent = "🍎"
+  appleXY = [positionX, positionY]
 }
+
 
 
 
