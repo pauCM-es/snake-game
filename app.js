@@ -31,8 +31,8 @@ const directions = {
 const grid$$ = document.querySelector("#grid")
 
 //*OTHER USEFULL FUNCTIONS
-const getElement = (x, y) => {
-  return elementsGrid$$[`${x}-${y}`]
+const getElement = (coordsArray) => {
+  return elementsGrid$$[`${coordsArray[0]}-${coordsArray[1]}`]
 }
 
 //*DRAW GRID
@@ -55,7 +55,6 @@ const drawGrid = (size) => {
     for (let x = 0; x < size; x++) {
       const span$$ = document.createElement("span")
       span$$.id = `${y}-${x}`
-      span$$.className = "empty"
       newRow$$.appendChild(span$$)
       elementsGrid$$ = {...elementsGrid$$, [span$$.id]: span$$} //easy access to html elements
     } 
@@ -63,27 +62,32 @@ const drawGrid = (size) => {
   }
 }
 
-
-const checkForSnake = ([positionCoords]) => {
-  for (const part of snake) {
-    part[0] === positionCoords[0] && part[1] === positionCoords[1] && console.log("true")
-  }
+//compaires if any of the snake's body parts has the same coordinates of an element
+const checkForSnake = (coordsArray) => {
+  return snake.some(bodyPart => bodyPart.toString() === coordsArray.toString())
 }
 
 //*APPLE
 const randomApple = (maxX, maxY) => {
-  //cheack first if the snake is in that position
-  const positionY = randomNumber(0, maxY) 
-  const positionX = randomNumber(0, maxX) 
-  checkForSnake([positionX, positionY])
+  //new apple position on grid
+  let positionY = randomNumber(0, maxY) 
+  let positionX = randomNumber(0, maxX) 
+  appleXY = [positionX, positionY]
+
+  //cheack if the snake is in that position. if true repeat until false
+  while (checkForSnake(appleXY)) {
+    positionY = randomNumber(0, maxY) 
+    positionX = randomNumber(0, maxX) 
+    appleXY = [positionX, positionY]
+  }
+  
   console.log('apple: ' + positionX,positionY)
   grid[positionY][positionX] = "A"
 
   //paint apple
-  const apple = getElement(positionX, positionY)
-  apple.classList.replace("empty", "apple")
+  const apple = getElement([positionX, positionY])
+  apple.classList.add("apple")
   apple.textContent = "🍎"
-  appleXY = [positionX, positionY]
 }
 
 
@@ -97,7 +101,7 @@ const randomApple = (maxX, maxY) => {
 //print snake head
 let head$$
 const printHead = () => {
-  head$$ = getElement(head[0], head[1])
+  head$$ = getElement([head[0], head[1]])
   head$$.classList.add("head")
 }
 
@@ -113,6 +117,16 @@ const checkWalls = (axis) => {
   }
 }
 
+//eat apple
+const eatApple = () => {
+  const apple = getElement(appleXY)
+  apple.classList.remove("apple")
+  apple.textContent = ""
+  score += 5
+  console.log("EAT APPLE +5pts!!!")
+  randomApple(sizeGrid, sizeGrid)
+}
+
 const move = (speed) => {
   setInterval(() => {
     console.log(currentDirection)
@@ -124,29 +138,28 @@ const move = (speed) => {
     checkWalls(0)
     head[1] = head[1] + x   // head[1]-> row
     checkWalls(1)
-    checkForSnake(appleXY)
-
-
     //update the array of coordenates of the snake's body parts.
     snake.unshift([head[0], head[1]])
     snake.pop()
+    checkForSnake(appleXY) && eatApple()
     printHead()
   }, speed);
 }
 
+// it doesn't allow movement in the oposite direction to your current one.
 document.onkeydown = (e) => {
   e = e || window.event;
   if (e.keyCode === 38) {
-    currentDirection = "up"
+    currentDirection !== "down" ? currentDirection = "up" : console.log("wrong direction")
     console.log(currentDirection)
   } else if (e.keyCode === 40) {
-    currentDirection = "down"
+    currentDirection !== "up" ? currentDirection = "down" : console.log("wrong direction")
     console.log(currentDirection)
   } else if (e.keyCode === 37) {
-    currentDirection = "left"
+    currentDirection !== "right" ? currentDirection = "left" : console.log("wrong direction")
     console.log(currentDirection)
   } else if (e.keyCode === 39) {
-    currentDirection = "right"
+    currentDirection !== "left" ? currentDirection = "right" : console.log("wrong direction")
     console.log(currentDirection)
   }
 }
