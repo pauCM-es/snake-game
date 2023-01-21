@@ -99,10 +99,9 @@ const randomApple = (maxX, maxY) => {
 
 //*SNAKE
 //print snake head
-let head$$
-const printHead = () => {
-  head$$ = getElement([head[0], head[1]])
-  head$$.classList.add("head")
+const printSnake = () => {
+  getElement(snake[0]).classList.add("head")
+  snake.length > 1 && getElement(snake[1]).classList.replace("head","body")
 }
 
 //check if the next position of the head is ouside of  the grid
@@ -123,26 +122,31 @@ const eatApple = () => {
   apple.classList.remove("apple")
   apple.textContent = ""
   score += 5
-  console.log("EAT APPLE +5pts!!!")
+  console.log("EAT APPLE +5pts!!! --> score: ", score)
   randomApple(sizeGrid, sizeGrid)
 }
 
+
 const move = (speed) => {
   setInterval(() => {
-    console.log(currentDirection)
-    head$$.classList.toggle("head")
-    //use the directions vectors to get the next id if the element where the head will be
+    snake.length === 1 && getElement(head).classList.remove("head")
+
+    //use the directions vectors to get the next id of the element where the head will be next
     const x = directions[currentDirection][0]
     const y = directions[currentDirection][1]
     head[0] = head[0] + y   // head[0]-> column
     checkWalls(0)
     head[1] = head[1] + x   // head[1]-> row
     checkWalls(1)
-    //update the array of coordenates of the snake's body parts.
+
+    //update the array of coordinates of the snake's body parts.
     snake.unshift([head[0], head[1]])
-    snake.pop()
-    checkForSnake(appleXY) && eatApple()
-    printHead()
+    if (!checkForSnake(appleXY)) {
+      snake.length > 1 && getElement(snake[snake.length -1]).classList.remove("body") 
+      snake.pop()
+     } else {eatApple()}
+    printSnake()
+    console.log(snake.length)
   }, speed);
 }
 
@@ -172,5 +176,5 @@ document.onkeydown = (e) => {
 createGridArray(sizeGrid)
 drawGrid(sizeGrid)
 randomApple(sizeGrid, sizeGrid)
-printHead()
+printSnake()
 // move(speed)
