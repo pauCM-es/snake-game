@@ -1,17 +1,11 @@
 import {
-  removeElements,
-  hasClass,
   randomNumber,
-  threeDigitNumber,
-  toggleClasses,
-  getRandomItems,
-  randomBoolean,
 } from "./helpers.js";
 
 
 
 const sizeGrid = 20
-let grid = []
+// let grid = []
 let score = 0
 let currentDirection = "left"
 let speed = 400
@@ -29,23 +23,22 @@ const directions = {
 }
 
 const grid$$ = document.querySelector("#grid")
+const startBtn$$ = document.querySelector(".start-btn")
+const score$$ = document.querySelector(".score")
 
-//*OTHER USEFULL FUNCTIONS
+//*OTHER USEFULL FUNCTIONS ----------------------------------------------------
+//get the element from the array created when drawing the grid
 const getElement = (coordsArray) => {
   return elementsGrid$$[`${coordsArray[0]}-${coordsArray[1]}`]
 }
 
-//*DRAW GRID
-const createGridArray = (size) => {
-  for (let i = 0; i < size; i++) {
-    const rowArray = []
-    for (let j = 0; j < size; j++) {
-      rowArray.push(0)
-    }
-    grid.push(rowArray)
-  }
+//compaires if any of the snake's body parts has the same coordinates of an element
+const checkForSnake = (coordsArray) => {
+  return snake.some(bodyPart => bodyPart.toString() === coordsArray.toString())
 }
 
+
+//*DRAW GRID and save in an object all elements --------------------------------
 const drawGrid = (size) => {
   //rows
   for (let y = 0;  y < size; y++) {
@@ -62,12 +55,8 @@ const drawGrid = (size) => {
   }
 }
 
-//compaires if any of the snake's body parts has the same coordinates of an element
-const checkForSnake = (coordsArray) => {
-  return snake.some(bodyPart => bodyPart.toString() === coordsArray.toString())
-}
 
-//*APPLE
+//*APPLE --------------------------------------------------------------------
 const randomApple = (maxX, maxY) => {
   //new apple position on grid
   let positionY = randomNumber(0, maxY) 
@@ -80,9 +69,6 @@ const randomApple = (maxX, maxY) => {
     positionX = randomNumber(0, maxX) 
     appleXY = [positionX, positionY]
   }
-  
-  console.log('apple: ' + positionX,positionY)
-  grid[positionY][positionX] = "A"
 
   //paint apple
   const apple = getElement([positionX, positionY])
@@ -92,13 +78,8 @@ const randomApple = (maxX, maxY) => {
 
 
 
-
-
-
-
-
-//*SNAKE
-//print snake head
+//*SNAKE ---------------------------------------------------------------------
+//print snake head and the next body part
 const printSnake = () => {
   getElement(snake[0]).classList.add("head")
   snake.length > 1 && getElement(snake[1]).classList.replace("head","body")
@@ -122,6 +103,7 @@ const eatApple = () => {
   apple.classList.remove("apple")
   apple.textContent = ""
   score += 5
+  score$$.textContent = score
   console.log("EAT APPLE +5pts!!! --> score: ", score)
   randomApple(sizeGrid, sizeGrid)
 }
@@ -169,12 +151,13 @@ document.onkeydown = (e) => {
 }
 
 
+//* GAME -------------------------------------------------------------------
+const init = () => {
+  drawGrid(sizeGrid)
+  randomApple(sizeGrid, sizeGrid)
+  printSnake()
+  move(speed)
+}
 
+startBtn$$.addEventListener("click", init)
 
-
-
-createGridArray(sizeGrid)
-drawGrid(sizeGrid)
-randomApple(sizeGrid, sizeGrid)
-printSnake()
-// move(speed)
